@@ -34,3 +34,5 @@ local record dom
 
   on: function(element: Element, event: string, listener: function(event: Event))
 end
+
+return dom
