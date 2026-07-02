@@ -16,8 +16,8 @@ print(operation .. "coding image...")
 async.next(limp.read(fs.read_file(input)), function(img: limp.Image): nil
   local new_img = operation == "En" and enimg.encode_image(img)  or enimg.decode_image(img)
   print("Saving image...")
-  async.next(limp.get_buffer(new_img, "image/png"), function(buffer: fs.Buffer): nil
+  async.next(limp.write(new_img), function(buffer: fs.Buffer): nil
     fs.write_file(output, buffer)
-    print("De" .. "coding complete!")
+    print(operation .. "coding complete!")
   end)
 end)

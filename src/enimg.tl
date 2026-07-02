@@ -53,8 +53,9 @@ local function encode_image(img: limp.Image): limp.Image
 
   for y = 0, size.y - 1 do
     for x = 0, size.x - 1 do
-      local location = index_to_point(permute_index(point_to_index(x, y, size.x),  key, n), size.x)
-      local old = point_to_index(x, y, size.x) << 2
+      local index = point_to_index(x, y, size.x)
+      local location = index_to_point(permute_index(index, key, n), size.x)
+      local old = index << 2
       local new = point_to_index(location.x, location.y, size.x) << 2
       for i = 0, 3 do
         limp.set_pixel(new_img, new + i, limp.get_pixel(img, old + i))
@@ -73,8 +74,9 @@ local function decode_image(img: limp.Image): limp.Image
 
   for y = 0, size.y - 1 do
     for x = 0, size.x - 1 do
-      local location = index_to_point(permute_index(point_to_index(x, y, size.x), key, n), size.x)
-      local old = point_to_index(x, y, size.x) << 2
+      local index = point_to_index(x, y, size.x)
+      local location = index_to_point(permute_index(index, key, n), size.x)
+      local old = index << 2
       local new = point_to_index(location.x, location.y, size.x) << 2
       for i = 0, 3 do
         limp.set_pixel(new_img, new + i, limp.get_pixel(img, old + i))

@@ -14,8 +14,8 @@ local record limp
   get_pixel: function(image: Image, index: integer): integer
   set_pixel: function(image: Image, index: integer, value: integer)
   create: function(size: Pair): Image
-  get_buffer: function(image: Image, mime: string): async.Aff<fs.Buffer>
-  read: function(target: fs.Buffer): async.Aff<Image>
+  write: function(image: Image): async.Aff<fs.Buffer>
+  read: function(target: any): async.Aff<Image>
 end
 
 return limp

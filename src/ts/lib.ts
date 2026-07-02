@@ -1,7 +1,5 @@
-import * as J from 'jimp'
+import { decode, encode } from '@jsquash/png'
 import * as lua from 'lua-in-js'
-
-const { Jimp } = J
 
 const utilsObject = {
   gcd: (a: number, b: number): number => (b === 0 ? a : utilsObject.gcd(b, a % b))
@@ -24,48 +22,75 @@ const asyncLib = new lua.Table({
 })
 
 const limpLib = new lua.Table({
-  create: (size: lua.Table) =>
-    new Jimp({
-      width: Number(size.get('x')),
-      height: Number(size.get('y'))
-    }),
-  read: (target: ArrayBuffer | Buffer<ArrayBufferLike>) => Jimp.read(target),
-  get_size: (image: InstanceType<typeof Jimp>) => new lua.Table({ x: image.bitmap.width, y: image.bitmap.height }),
-  get_pixel: (image: InstanceType<typeof Jimp>, index: number) => image.bitmap.data[index],
-  set_pixel: (image: InstanceType<typeof Jimp>, index: number, value: number) => (image.bitmap.data[index] = value),
-  get_buffer: (image: InstanceType<typeof Jimp>, mime: Parameters<InstanceType<typeof Jimp>['getBuffer']>[0]) =>
-    image.getBuffer(mime)
+  create: (size: lua.Table): ImageData => {
+    const w = Number(size.get('x'))
+    const h = Number(size.get('y'))
+    return {
+      width: w,
+      height: h,
+      data: new Uint8ClampedArray(w * h * 4),
+      colorSpace: 'srgb'
+    }
+  },
+  read: async (target: ArrayBuffer) => {
+    const img = await decode(target)
+    return {
+      width: img.width,
+      height: img.height,
+      buffer: img.data.buffer,
+      data: new Uint8Array(img.data)
+    }
+  },
+  write: (image: ImageData) =>
+    encode({ width: image.width, height: image.height, data: image.data, colorSpace: 'srgb' }),
+  get_size: (image: ImageData) => new lua.Table({ x: image.width, y: image.height }),
+  get_pixel: (image: ImageData, index: number) => image.data[index],
+  set_pixel: (image: ImageData, index: number, value: number) => (image.data[index] = value)
 })
 
-const domLib = new lua.Table({
+const webLib = new lua.Table({
+  console: (...msg: unknown[]) => console.log(...msg),
   query: (selector: string) => document.querySelector(selector),
   create: (tag: string) => document.createElement(tag),
   body: () => document.body,
   append: (parent: Element, child: Element) => parent.appendChild(child),
-  remove: (element: Element) => element.remove(),
-  text: (element: Element) => element.textContent ?? '',
+  remove: (parent: Element, child: Element) => parent.removeChild(child),
+  get_text: (element: Element) => element.textContent ?? '',
   set_text: (element: Element, text: string) => (element.textContent = text),
-  html: (element: Element) => element.innerHTML,
+  get_html: (element: Element) => element.innerHTML,
   set_html: (element: Element, html: string) => (element.innerHTML = html),
-  attr: (element: Element, name: string) => element.getAttribute(name),
+  get_attr: (element: Element, name: string) => element.getAttribute(name),
   set_attr: (element: Element, name: string, value: string) => element.setAttribute(name, value),
-  style: (element: HTMLElement, name: string) => element.style.getPropertyValue(name),
+  get_style: (element: HTMLElement, name: string) => element.style.getPropertyValue(name),
   set_style: (element: HTMLElement, name: string, value: string) => element.style.setProperty(name, value),
-  value: (element: HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement) => element.value,
+  get_value: (element: HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement) => element.value,
   set_value: (element: HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement, value: string) =>
     (element.value = value),
-  on: (element: Element, event: string, listener: (event: Event) => void) => element.addEventListener(event, listener)
+  get_prop: (element: object, name: string | number) => element[name as keyof typeof element],
+  set_prop: (element: object, name: string | number, value: object) =>
+    ((element[name as keyof typeof element] as object) = value),
+  on: (element: Element, event: string, listener: (event: Event) => void) => element.addEventListener(event, listener),
+  off: (element: Element, event: string, listener: (event: Event) => void) =>
+    element.removeEventListener(event, listener),
+  once: (element: Element, event: string, listener: (event: Event) => void) =>
+    element.addEventListener(event, listener, { once: true }),
+  revoke_object_url: (url: string) => URL.revokeObjectURL(url),
+  create_object_url: (blob: Blob) => URL.createObjectURL(blob),
+  new_blob: (blobPart: BlobPart) => new Blob([blobPart]),
+  set_timeout: (callback: () => void, delay: number) => setTimeout(callback, delay),
+  array_buffer: (blob: Blob) => blob.arrayBuffer(),
+  click: (element: Element & { click: () => void }) => element.click()
 })
 
 export default {
   utils: utilsLib,
   async: asyncLib,
   limp: limpLib,
-  dom: domLib,
+  web: webLib,
   loadAll: (env: ReturnType<(typeof lua)['createEnv']>) => {
     env.loadLib('utils', utilsLib)
     env.loadLib('async', asyncLib)
     env.loadLib('limp', limpLib)
-    env.loadLib('dom', domLib)
+    env.loadLib('web', webLib)
   }
 }
