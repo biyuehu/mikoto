@@ -1,0 +1,33 @@
+name: CI
+
+on:
+  push:
+    branches: [ main ]
+  pull_request:
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Install Lua + LuaRocks
+        uses: leafo/gh-actions-lua@v10
+        with:
+          luaVersion: '5.4'
+
+      - name: Install Teal
+        run: |
+          luarocks install tl
+          luarocks install cyan
+
+      - name: Install Bun
+        uses: oven-sh/setup-bun@v2
+
+      - name: Type check + Build
+        run: |
+          bun install
+          cyan check src/main.tl
+          cyan build
+          bun vite build
