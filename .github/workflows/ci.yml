@@ -12,11 +12,13 @@ jobs:
     steps:
       - uses: actions/checkout@v4
 
-      - name: Install Lua + LuaRocks
+      - name: Install Lua
         uses: leafo/gh-actions-lua@v10
         with:
           luaVersion: '5.4'
-          luaRocksVersion: "latest"
+
+      - name: Install LuaRocks
+        uses: leafo/gh-actions-luarocks@v6
 
       - name: Install Teal + Cyan
         run: |
