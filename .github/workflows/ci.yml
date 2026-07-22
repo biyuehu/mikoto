@@ -35,7 +35,7 @@ jobs:
 
       - name: Deploy to Vercel
         if: github.event_name == 'push' && github.ref == 'refs/heads/main'
-        with:
+        env:
           vercel-token: ${{ secrets.VERCEL_TOKEN }}
           vercel-org-id: ${{ secrets.VERCEL_ORG_ID }}
           vercel-project-id: ${{ secrets.VERCEL_PROJECT_ID }}
