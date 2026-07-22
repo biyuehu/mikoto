@@ -40,5 +40,5 @@ jobs:
           vercel-org-id: ${{ secrets.VERCEL_ORG_ID }}
           vercel-project-id: ${{ secrets.VERCEL_PROJECT_ID }}
         run: |
-          bunx vercel pull --yes --environment=production
-          bunx vercel deploy --prebuilt --prod
+          bunx vercel pull --yes --environment=production --token=$VERCEL_TOKEN
+          bunx vercel deploy ./dist --prod --token=$VERCEL_TOKEN
