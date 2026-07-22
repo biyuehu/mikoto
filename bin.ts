@@ -7,5 +7,5 @@ import serverLib from './src/ts/server-lib'
 const env = lua.createEnv()
 lib.loadAll(env)
 serverLib.loadAll(env)
-env.loadLib('enimg', env.parse(readFileSync(join(__dirname, 'build/enimg.lua'), 'utf-8')).exec() as lua.Table)
+env.loadLib('mikoto', env.parse(readFileSync(join(__dirname, 'build/mikoto.lua'), 'utf-8')).exec() as lua.Table)
 env.parse(readFileSync(join(__dirname, 'build/bin.lua'), 'utf-8')).exec()

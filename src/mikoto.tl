@@ -87,9 +87,9 @@ local function decode_image(img: limp.Image): limp.Image
   return new_img
 end
 
-local enimg = {
+local mikoto = {
   encode_image = encode_image,
   decode_image = decode_image,
 }
 
-return enimg
+return mikoto

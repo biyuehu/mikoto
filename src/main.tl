@@ -1,6 +1,6 @@
 local async = require("async")
 local limp = require("limp")
-local enimg = require("enimg")
+local mikoto = require("mikoto")
 local web = require("web")
 local utils = require("utils")
 
@@ -71,10 +71,10 @@ web.append(entry, file_input)
 local footer = el("footer", "app-footer")
 local footer_line1 = el("div", "footer-line footer-line-teal")
 local footer_link = el("a", "footer-line-teal")
-web.set_attr(footer_link, "href", "https://github.com/biyuehu/enimg")
+web.set_attr(footer_link, "href", "https://github.com/biyuehu/mikoto")
 web.set_attr(footer_link, "target", "_blank")
 web.set_attr(footer_link, "rel", "noopener noreferrer")
-web.set_text(footer_link, "enimg")
+web.set_text(footer_link, "mikoto")
 web.append(footer_line1, footer_link)
 web.append(footer, footer_line1)
 local footer_line2 = el("div", "footer-line footer-line-sub")
@@ -123,7 +123,7 @@ web.on(web.query("#encode"), "click", function()
   utils.set_loading(true)
   web.set_timeout(function()
     async.next(limp.read(buffer), function(image: limp.Image): nil
-      async.next(limp.write(enimg.encode_image(image)), function(data: any): nil
+      async.next(limp.write(mikoto.encode_image(image)), function(data: any): nil
         buffer = data as web.Object
         show_image(web.new_blob(buffer))
         utils.set_loading(false)
@@ -139,7 +139,7 @@ web.on(web.query("#decode"), "click", function()
   utils.set_loading(true)
   web.set_timeout(function()
     async.next(limp.read(buffer), function(image: limp.Image): nil
-      async.next(limp.write(enimg.decode_image(image)), function(data: any): nil
+      async.next(limp.write(mikoto.decode_image(image)), function(data: any): nil
         buffer = data as web.Object
         show_image(web.new_blob(buffer))
       utils.set_loading(false)

@@ -2,7 +2,7 @@ local fs = require("fs")
 local async = require("async")
 local limp = require("limp")
 local process = require("process")
-local enimg = require("enimg")
+local mikoto = require("mikoto")
 
 local enum Operation
   "En"
@@ -14,7 +14,7 @@ local output = process.argv[3] or input .. "_decoded.png"
 
 print(operation .. "coding image...")
 async.next(limp.read(fs.read_file(input)), function(img: limp.Image): nil
-  local new_img = operation == "En" and enimg.encode_image(img)  or enimg.decode_image(img)
+  local new_img = operation == "En" and mikoto.encode_image(img)  or mikoto.decode_image(img)
   print("Saving image...")
   async.next(limp.write(new_img), function(buffer: fs.Buffer): nil
     fs.write_file(output, buffer)

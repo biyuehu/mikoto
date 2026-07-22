@@ -1,11 +1,11 @@
 import * as lua from 'lua-in-js'
-import enimgCode from '../../build/enimg.lua?raw'
 import mainCode from '../../build/main.lua?raw'
+import mikotoCode from '../../build/mikoto.lua?raw'
 import lib from './lib'
 
 const env = lua.createEnv()
 lib.loadAll(env)
-env.loadLib('enimg', env.parse(enimgCode).exec() as lua.Table)
+env.loadLib('mikoto', env.parse(mikotoCode).exec() as lua.Table)
 try {
   env.parse(mainCode).exec()
 } catch (error) {

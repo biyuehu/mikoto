@@ -1,10 +1,10 @@
 {
-  "name": "enimg",
+  "name": "mikoto",
   "version": "1.0.0",
   "description": "A tiny image encoding library, and designed for",
   "license": "GPL-3.0-only",
   "bin": {
-    "enimg": "bin.ts"
+    "mikoto": "bin.ts"
   },
   "dependencies": {
     "@jsquash/png": "^3.1.1",

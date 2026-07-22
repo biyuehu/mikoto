@@ -1,3 +1,3 @@
-# Placeholder
+# Mikoto
 
-[![CI](https://github.com/biyuehu/enimg/actions/workflows/ci.yml/badge.svg)](https://github.com/biyuehu/enimg/actions/workflows/ci.yml)
+[![CI](https://github.com/biyuehu/mikoto/actions/workflows/ci.yml/badge.svg)](https://github.com/biyuehu/mikoto/actions/workflows/ci.yml)
