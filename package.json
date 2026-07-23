@@ -5,7 +5,7 @@
   "license": "GPL-3.0-only",
   "scripts": {
     "dev": "vite",
-    "build:all": "cyan check src/main.tl && cyan build && vite build",
+    "build:prepare": "cyan check src/main.tl && cyan build",
     "build": "vite build"
   },
   "bin": {
