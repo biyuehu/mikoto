@@ -33,3 +33,9 @@ jobs:
           bun install
           bun run build:prepare
           bun run build
+
+      - name: Upload Artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: website
+          path: ./dist
