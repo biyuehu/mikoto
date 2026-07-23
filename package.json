@@ -1,7 +1,7 @@
 {
   "name": "mikoto",
   "version": "1.0.0",
-  "description": "A tiny image encoding library, and designed for",
+  "description": "A simple abd tiny image encoding/decoding tool based on Teal. Powered by efficient algorithms, it is designed for evading network content censorship and surveillance.",
   "license": "GPL-3.0-only",
   "scripts": {
     "dev": "vite",
